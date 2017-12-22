@@ -928,7 +928,7 @@ public class InAppBrowser extends CordovaPlugin {
     public class InAppBrowserClient extends WebViewClient {
         EditText edittext;
         CordovaWebView webView;
-
+        ProgressDialog progressDialog;
         /**
          * Constructor.
          *

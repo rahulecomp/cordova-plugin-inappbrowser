@@ -19,7 +19,9 @@
 package org.apache.cordova.inappbrowser;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.provider.Browser;
 import android.content.res.Resources;
@@ -936,6 +938,16 @@ public class InAppBrowser extends CordovaPlugin {
         public InAppBrowserClient(CordovaWebView webView, EditText mEditText) {
             this.webView = webView;
             this.edittext = mEditText;
+            progressDialog = new ProgressDialog(webView.getContext());
+            progressDialog.setCancelable(true);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener(){
+                @Override
+                public void onCancel(DialogInterface dialog){
+                    inAppWebView.stopLoading();
+                }
+            });
         }
 
         /**
@@ -998,6 +1010,7 @@ public class InAppBrowser extends CordovaPlugin {
                     LOG.e(LOG_TAG, "Error sending sms " + url + ":" + e.toString());
                 }
             }
+            progressDialog.show();
             return false;
         }
 
@@ -1064,6 +1077,7 @@ public class InAppBrowser extends CordovaPlugin {
             } catch (JSONException ex) {
                 LOG.d(LOG_TAG, "Should never happen");
             }
+            progressDialog.dismiss();
         }
 
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
@@ -1080,6 +1094,7 @@ public class InAppBrowser extends CordovaPlugin {
             } catch (JSONException ex) {
                 LOG.d(LOG_TAG, "Should never happen");
             }
+            progressDialog.dismiss();
         }
 
         /**

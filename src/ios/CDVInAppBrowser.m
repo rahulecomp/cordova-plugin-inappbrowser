@@ -467,10 +467,6 @@
         [pluginResult setKeepCallback:[NSNumber numberWithBool:YES]];
 
         [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
-        if((theWebView.canGoBack || theWebView.canGoForward) &&  self.inAppBrowserViewController.shouldLoad) {
-            self.inAppBrowserViewController.shouldLoad = NO;
-            [theWebView reload];
-        }
     }
 }
 
@@ -520,7 +516,6 @@
 - (id)initWithUserAgent:(NSString*)userAgent prevUserAgent:(NSString*)prevUserAgent browserOptions: (CDVInAppBrowserOptions*) browserOptions
 {
     self = [super init];
-    self.shouldLoad = NO;
     if (self != nil) {
         _userAgent = userAgent;
         _prevUserAgent = prevUserAgent;
@@ -849,12 +844,7 @@
 
 - (void)goBack:(id)sender
 {
-    NSString *currentUrl = self.webView.request.URL.absoluteString;
     [self.webView goBack];
-    if ([currentUrl rangeOfString:@"DownloadDocumentAndAcknowledge"].location != NSNotFound) {
-        [self.webView goBack];
-        self.shouldLoad = YES;
-    }
 }
 
 - (void)goForward:(id)sender

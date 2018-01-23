@@ -946,6 +946,10 @@
     self.addressLabel.text = [self.currentURL absoluteString];
     self.backButton.enabled = theWebView.canGoBack;
     self.forwardButton.enabled = theWebView.canGoForward;
+    if([self.addressLabel.text containsString:@"MobileWebConnection/Documents"]) {
+        self.backButton.enabled = NO;
+        self.forwardButton.enabled = NO;
+    }
     [self renderForwardButtonImage:self.forwardButton.enabled];
     [self renderBackButtonImage:self.backButton.enabled];
     [self.spinner stopAnimating];

@@ -139,6 +139,12 @@
 	    <source-file src="src/ios/CDVInAppBrowser.m" />
 
 	    <framework src="CoreGraphics.framework" />
+
+        <resource-file src="src/ios/icons/ic_action_previous_item.png" target="Resources/Images.xcassets/ic_action_previous_item.png" />
+        <resource-file src="src/ios/icons/ic_action_next_item.png" target="Resources/Images.xcassets/ic_action_next_item.png" />
+        <resource-file src="src/ios/icons/ic_action_next_item_inactive.png" target="Resources/Images.xcassets/ic_action_next_item_inactive.png" />
+        <resource-file src="src/ios/icons/ic_action_previous_item_inactive.png" target="Resources/Images.xcassets/ic_action_previous_item_inactive.png" />
+
     </platform>
 
     <!-- osx -->

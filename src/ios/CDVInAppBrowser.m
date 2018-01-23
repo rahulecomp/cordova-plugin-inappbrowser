@@ -537,6 +537,39 @@
    self.webView.delegate = nil;
 }
 
+
+- (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
+    //UIGraphicsBeginImageContext(newSize);
+    // In next line, pass 0.0 to use the current device's pixel scaling factor (and thus account for Retina resolution).
+    // Pass 1.0 to force exact pixel size.
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
+
+- (void) renderForwardButtonImage:(BOOL)active
+{
+    UIImage *forwardImage = [[UIImage imageNamed:@"ic_action_next_item_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    if(active) {
+        forwardImage = [[UIImage imageNamed:@"ic_action_next_item.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    }
+    forwardImage = [self imageWithImage:forwardImage scaledToSize:CGSizeMake(30, 30)];
+    [self.forwardButton setImage:forwardImage];
+}
+
+- (void) renderBackButtonImage:(BOOL)active
+{
+    UIImage *backwardImage = [[UIImage imageNamed:@"ic_action_previous_item_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    if(active) {
+        backwardImage = [[UIImage imageNamed:@"ic_action_previous_item.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    }
+    backwardImage = [self imageWithImage:backwardImage scaledToSize:CGSizeMake(30, 30)];
+    [self.backButton setImage:backwardImage];
+}
+
 - (void)createViews
 {
     // We create the views in code for primarily for ease of upgrades and not requiring an external .xib to be included
@@ -634,14 +667,14 @@
     self.addressLabel.textColor = [UIColor colorWithWhite:1.000 alpha:1.000];
     self.addressLabel.userInteractionEnabled = NO;
 
-    NSString* frontArrowString = NSLocalizedString(@"►", nil); // create arrow from Unicode char
-    self.forwardButton = [[UIBarButtonItem alloc] initWithTitle:frontArrowString style:UIBarButtonItemStylePlain target:self action:@selector(goForward:)];
+    UIImage *forwardImage = [[UIImage imageNamed:@"ic_action_next_item_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    self.forwardButton = [[UIBarButtonItem alloc] initWithImage:forwardImage style:UIBarButtonItemStylePlain target:self action:@selector(goForward:)];
     self.forwardButton.enabled = YES;
     self.forwardButton.imageInsets = UIEdgeInsetsZero;
     self.forwardButton.tintColor = [UIColor whiteColor];
 
-    NSString* backArrowString = NSLocalizedString(@"◄", nil);  // create arrow from Unicode char
-    self.backButton = [[UIBarButtonItem alloc] initWithTitle:backArrowString style:UIBarButtonItemStylePlain target:self action:@selector(goBack:)];
+    UIImage *backImage = [[UIImage imageNamed:@"ic_action_previous_item_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    self.backButton = [[UIBarButtonItem alloc] initWithImage:backImage style:UIBarButtonItemStylePlain target:self action:@selector(goBack:)];
     self.backButton.enabled = YES;
     self.backButton.imageInsets = UIEdgeInsetsZero;
     self.backButton.tintColor = [UIColor whiteColor];
@@ -889,7 +922,8 @@
     self.addressLabel.text = NSLocalizedString(@"Loading...", nil);
     self.backButton.enabled = theWebView.canGoBack;
     self.forwardButton.enabled = theWebView.canGoForward;
-
+    [self renderForwardButtonImage:self.forwardButton.enabled];
+    [self renderBackButtonImage:self.backButton.enabled];
     [self.spinner startAnimating];
 
     return [self.navigationDelegate webViewDidStartLoad:theWebView];
@@ -912,7 +946,8 @@
     self.addressLabel.text = [self.currentURL absoluteString];
     self.backButton.enabled = theWebView.canGoBack;
     self.forwardButton.enabled = theWebView.canGoForward;
-
+    [self renderForwardButtonImage:self.forwardButton.enabled];
+    [self renderBackButtonImage:self.backButton.enabled];
     [self.spinner stopAnimating];
 
     // Work around a bug where the first time a PDF is opened, all UIWebViews
@@ -941,6 +976,8 @@
 
     self.backButton.enabled = theWebView.canGoBack;
     self.forwardButton.enabled = theWebView.canGoForward;
+    [self renderForwardButtonImage:self.forwardButton.enabled];
+    [self renderBackButtonImage:self.backButton.enabled];
     [self.spinner stopAnimating];
 
     self.addressLabel.text = NSLocalizedString(@"Load Error", nil);

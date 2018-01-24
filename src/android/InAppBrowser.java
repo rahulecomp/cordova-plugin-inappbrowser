@@ -678,9 +678,10 @@ public class InAppBrowser extends CordovaPlugin {
                 if (Build.VERSION.SDK_INT >= 16)
                     forward.getAdjustViewBounds();
 
-                int leftMargin = 10;
-                ((MarginLayoutParams) forward.getLayoutParams()).leftMargin = leftMargin;
-
+                int forwardLeftMargin = 25;
+                int backLeftMargin = 50;
+                ((MarginLayoutParams) forward.getLayoutParams()).leftMargin = forwardLeftMargin;
+                ((MarginLayoutParams) forward.getLayoutParams()).leftMargin = backLeftMargin;
                 forward.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         goForward();

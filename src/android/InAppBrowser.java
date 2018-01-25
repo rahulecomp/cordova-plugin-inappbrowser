@@ -685,7 +685,7 @@ public class InAppBrowser extends CordovaPlugin {
                 int forwardLeftMargin = 25;
                 int backLeftMargin = 50;
                 ((MarginLayoutParams) forward.getLayoutParams()).leftMargin = forwardLeftMargin;
-                ((MarginLayoutParams) forward.getLayoutParams()).leftMargin = backLeftMargin;
+                ((MarginLayoutParams) back.getLayoutParams()).leftMargin = backLeftMargin;
                 forward.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         goForward();
@@ -722,6 +722,7 @@ public class InAppBrowser extends CordovaPlugin {
                 close.setLayoutParams(closeLayoutParams);
                 close.setTransformationMethod(null);
                 close.setText("Home");
+                close.setTextSize(20);
                 close.setContentDescription("Close Button");
                 close.setId(Integer.valueOf(5));
                 int closeResId = activityRes.getIdentifier("ic_action_remove", "drawable", cordova.getActivity().getPackageName());

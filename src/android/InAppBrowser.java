@@ -47,7 +47,7 @@ import android.webkit.HttpAuthHandler;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
-import android.webkit.WebView;
+import android.webkit.WebView
 import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -645,7 +645,7 @@ public class InAppBrowser extends CordovaPlugin {
                     back.setBackground(null);
                 else
                     back.setBackgroundDrawable(null);
-                back.setImageDrawable(backInactiveIcon);
+                back.setImageDrawable(backIcon);
                 back.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 back.setPadding(0, this.dpToPixels(10), 0, this.dpToPixels(10));
                 if (Build.VERSION.SDK_INT >= 16)
@@ -672,8 +672,12 @@ public class InAppBrowser extends CordovaPlugin {
                     forward.setBackground(null);
                 else
                     forward.setBackgroundDrawable(null);
-                forward.setImageDrawable(fwdInactiveIcon);
+                forward.setImageDrawable(fwdIcon);
                 forward.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+                forward.setImageAlpha(35);
+                back.setImageAlpha(35);
+
                 //forward.setPadding(0, this.dpToPixels(10), 0, this.dpToPixels(10));
                 if (Build.VERSION.SDK_INT >= 16)
                     forward.getAdjustViewBounds();
@@ -716,6 +720,7 @@ public class InAppBrowser extends CordovaPlugin {
                 RelativeLayout.LayoutParams closeLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
                 closeLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 close.setLayoutParams(closeLayoutParams);
+                close.setTransformationMethod(null);
                 close.setText("Home");
                 close.setContentDescription("Close Button");
                 close.setId(Integer.valueOf(5));
@@ -786,14 +791,14 @@ public class InAppBrowser extends CordovaPlugin {
                     @Override
                     public void onHistoryChanged() {
                         if (inAppWebView.canGoBack()) {
-                            back.setImageDrawable(backIcon);
+                            back.setImageAlpha(255);
                         } else {
-                            back.setImageDrawable(backInactiveIcon);
+                            back.setImageAlpha(35);
                         }
                         if (inAppWebView.canGoForward()) {
-                            forward.setImageDrawable(fwdIcon);
+                            forward.setImageAlpha(255);
                         } else {
-                            forward.setImageDrawable(fwdInactiveIcon);
+                            forward.setImageAlpha(35);
                         }
                     }
                 };

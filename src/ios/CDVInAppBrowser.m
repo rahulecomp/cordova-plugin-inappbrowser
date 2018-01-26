@@ -676,7 +676,7 @@
     UIImage *backImage = [[UIImage imageNamed:@"ic_action_previous_item_inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     self.backButton = [[UIBarButtonItem alloc] initWithImage:backImage style:UIBarButtonItemStylePlain target:self action:@selector(goBack:)];
     self.backButton.enabled = YES;
-    self.backButton.imageInsets = UIEdgeInsetsZero;
+    self.backButton.imageInsets = UIEdgeInsetsMake(1.5, 0, 0, 0);
     self.backButton.tintColor = [UIColor whiteColor];
     [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton, self.backButton, fixedSpaceButton, self.forwardButton]];
 

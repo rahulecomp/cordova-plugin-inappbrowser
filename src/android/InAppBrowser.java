@@ -22,6 +22,8 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
+import android.util.DisplayMetrics;
 import android.content.Intent;
 import android.provider.Browser;
 import android.content.res.Resources;
@@ -594,6 +596,28 @@ public class InAppBrowser extends CordovaPlugin {
                 return value;
             }
 
+            private boolean isTabletDevice() {
+                boolean device_large = ((cordova.getActivity().getResources().getConfiguration().screenLayout &
+                        Configuration.SCREENLAYOUT_SIZE_MASK) >=
+                        Configuration.SCREENLAYOUT_SIZE_LARGE);
+
+                if (device_large) {
+                    DisplayMetrics metrics = new DisplayMetrics();
+                    cordova.getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+                    if (metrics.densityDpi == DisplayMetrics.DENSITY_DEFAULT
+                            || metrics.densityDpi == DisplayMetrics.DENSITY_HIGH
+                            || metrics.densityDpi == DisplayMetrics.DENSITY_MEDIUM
+                            || metrics.densityDpi == DisplayMetrics.DENSITY_TV
+                            || metrics.densityDpi == DisplayMetrics.DENSITY_XHIGH
+                            || metrics.densityDpi == DisplayMetrics.DENSITY_XXHIGH) {
+
+                        return true;
+                    }
+                }
+                return false;
+            }
+
             @SuppressLint("NewApi")
             public void run() {
 
@@ -686,9 +710,14 @@ public class InAppBrowser extends CordovaPlugin {
 
                 int forwardLeftMargin = 25;
                 int backLeftMargin = 50;
+                int topMargin = 6;
+                if(this.isTabletDevice()) {
+                    backLeftMargin = 25;
+                    topMargin = 3;
+                }
                 ((MarginLayoutParams) forward.getLayoutParams()).leftMargin = forwardLeftMargin;
                 ((MarginLayoutParams) back.getLayoutParams()).leftMargin = backLeftMargin;
-                ((MarginLayoutParams) forward.getLayoutParams()).topMargin = ((MarginLayoutParams) forward.getLayoutParams()).topMargin - 6;
+                ((MarginLayoutParams) forward.getLayoutParams()).topMargin = ((MarginLayoutParams) forward.getLayoutParams()).topMargin - topMargin;
                 forward.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         goForward();

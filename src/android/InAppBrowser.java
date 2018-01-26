@@ -647,7 +647,6 @@ public class InAppBrowser extends CordovaPlugin {
                     back.setBackgroundDrawable(null);
                 back.setImageDrawable(backIcon);
                 back.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                back.setPadding(0, this.dpToPixels(10), 0, this.dpToPixels(10));
                 if (Build.VERSION.SDK_INT >= 16)
                     back.getAdjustViewBounds();
 
@@ -679,6 +678,9 @@ public class InAppBrowser extends CordovaPlugin {
                 back.setImageAlpha(35);
 
                 //forward.setPadding(0, this.dpToPixels(10), 0, this.dpToPixels(10));
+                forward.setPadding(0, this.dpToPixels(10), 0, this.dpToPixels(10));
+                back.setPadding(0, this.dpToPixels(10), 0, this.dpToPixels(10));
+                
                 if (Build.VERSION.SDK_INT >= 16)
                     forward.getAdjustViewBounds();
 
@@ -686,6 +688,7 @@ public class InAppBrowser extends CordovaPlugin {
                 int backLeftMargin = 50;
                 ((MarginLayoutParams) forward.getLayoutParams()).leftMargin = forwardLeftMargin;
                 ((MarginLayoutParams) back.getLayoutParams()).leftMargin = backLeftMargin;
+                ((MarginLayoutParams) forward.getLayoutParams()).topMargin = ((MarginLayoutParams) forward.getLayoutParams()).topMargin - 6;
                 forward.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         goForward();

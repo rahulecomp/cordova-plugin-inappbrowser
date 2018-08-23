@@ -29,6 +29,7 @@ import android.provider.Browser;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -98,6 +99,9 @@ public class InAppBrowser extends CordovaPlugin {
     private static final Boolean DEFAULT_HARDWARE_BACK = true;
     private static final String USER_WIDE_VIEW_PORT = "useWideViewPort";
     private static final String CLOSE_BUTTON_CAPTION = "closebuttoncaption";
+
+    private static final List customizableOptions = Arrays.asList(CLOSE_BUTTON_CAPTION);
+
 
     private InAppBrowserDialog dialog;
     private WebView inAppWebView;

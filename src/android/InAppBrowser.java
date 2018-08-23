@@ -767,6 +767,7 @@ public class InAppBrowser extends CordovaPlugin {
                 close.setTransformationMethod(null);
                 close.setText(closeButtonCaption);
                 close.setTextSize(20);
+                close.setTextColor(Color.parseColor("#ffffff"));
                 close.setContentDescription("Close Button");
                 close.setId(Integer.valueOf(5));
                 int closeResId = activityRes.getIdentifier("ic_action_remove", "drawable", cordova.getActivity().getPackageName());

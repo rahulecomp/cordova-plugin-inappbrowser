@@ -97,6 +97,7 @@ public class InAppBrowser extends CordovaPlugin {
     private static final String SHOULD_PAUSE = "shouldPauseOnSuspend";
     private static final Boolean DEFAULT_HARDWARE_BACK = true;
     private static final String USER_WIDE_VIEW_PORT = "useWideViewPort";
+    private static final String CLOSE_BUTTON_CAPTION = "closebuttoncaption";
 
     private InAppBrowserDialog dialog;
     private WebView inAppWebView;
@@ -111,6 +112,7 @@ public class InAppBrowser extends CordovaPlugin {
     private boolean mediaPlaybackRequiresUserGesture = false;
     private boolean shouldPauseInAppBrowser = false;
     private boolean useWideViewPort = true;
+    private String closeButtonCaption = "";
     private ValueCallback<Uri> mUploadCallback;
     private ValueCallback<Uri[]> mUploadCallbackLollipop;
     private final static int FILECHOOSER_REQUESTCODE = 1;
@@ -133,7 +135,7 @@ public class InAppBrowser extends CordovaPlugin {
                 t = SELF;
             }
             final String target = t;
-            final HashMap<String, Boolean> features = parseFeature(args.optString(2));
+            final HashMap<String, String> features = parseFeature(args.optString(2));
 
             LOG.d(LOG_TAG, "target = " + target);
 
@@ -372,18 +374,22 @@ public class InAppBrowser extends CordovaPlugin {
      * @param optString
      * @return
      */
-    private HashMap<String, Boolean> parseFeature(String optString) {
+    private HashMap<String, String> parseFeature(String optString) {
         if (optString.equals(NULL)) {
             return null;
         } else {
-            HashMap<String, Boolean> map = new HashMap<String, Boolean>();
+            HashMap<String, String> map = new HashMap<String, String>();
             StringTokenizer features = new StringTokenizer(optString, ",");
             StringTokenizer option;
             while(features.hasMoreElements()) {
                 option = new StringTokenizer(features.nextToken(), "=");
                 if (option.hasMoreElements()) {
                     String key = option.nextToken();
-                    Boolean value = option.nextToken().equals("no") ? Boolean.FALSE : Boolean.TRUE;
+                    //Boolean value = option.nextToken().equals("no") ? Boolean.FALSE : Boolean.TRUE;
+                    String value = option.nextToken();
+                    if (!customizableOptions.contains(key)){
+                        value = value.equals("yes") || value.equals("no") ? value : "yes";
+                    }
                     map.put(key, value);
                 }
             }
@@ -529,7 +535,7 @@ public class InAppBrowser extends CordovaPlugin {
      * @param url the url to load.
      * @param features jsonObject
      */
-    public String showWebPage(final String url, HashMap<String, Boolean> features) {
+    public String showWebPage(final String url, HashMap<String, String> features) {
         // Determine if we should hide the location bar.
         showLocationBar = true;
         showZoomControls = true;
@@ -537,44 +543,50 @@ public class InAppBrowser extends CordovaPlugin {
         mediaPlaybackRequiresUserGesture = false;
 
         if (features != null) {
-            Boolean show = features.get(LOCATION);
+            String show = features.get(LOCATION);
             if (show != null) {
-                showLocationBar = show.booleanValue();
+                showLocationBar = show.equals("yes") ? true : false;
             }
-            Boolean zoom = features.get(ZOOM);
+
+            String zoom = features.get(ZOOM);
             if (zoom != null) {
-                showZoomControls = zoom.booleanValue();
+                showZoomControls = zoom.equals("yes") ? true : false;
             }
-            Boolean hidden = features.get(HIDDEN);
+            String hidden = features.get(HIDDEN);
             if (hidden != null) {
-                openWindowHidden = hidden.booleanValue();
+                openWindowHidden =  hidden.equals("yes") ? true : false;
             }
-            Boolean hardwareBack = features.get(HARDWARE_BACK_BUTTON);
+            String hardwareBack = features.get(HARDWARE_BACK_BUTTON);
             if (hardwareBack != null) {
-                hadwareBackButton = hardwareBack.booleanValue();
+                hadwareBackButton = hardwareBack.equals("yes") ? true : false;
             } else {
                 hadwareBackButton = DEFAULT_HARDWARE_BACK;
             }
-            Boolean mediaPlayback = features.get(MEDIA_PLAYBACK_REQUIRES_USER_ACTION);
+            String mediaPlayback = features.get(MEDIA_PLAYBACK_REQUIRES_USER_ACTION);
             if (mediaPlayback != null) {
-                mediaPlaybackRequiresUserGesture = mediaPlayback.booleanValue();
+                mediaPlaybackRequiresUserGesture =  mediaPlayback.equals("yes") ? true : false;
             }
-            Boolean cache = features.get(CLEAR_ALL_CACHE);
+            String cache = features.get(CLEAR_ALL_CACHE);
             if (cache != null) {
-                clearAllCache = cache.booleanValue();
+                clearAllCache = cache.equals("yes") ? true : false;
             } else {
                 cache = features.get(CLEAR_SESSION_CACHE);
                 if (cache != null) {
-                    clearSessionCache = cache.booleanValue();
+                    clearSessionCache = cache.equals("yes") ? true : false;
                 }
             }
-            Boolean shouldPause = features.get(SHOULD_PAUSE);
+            String shouldPause = features.get(SHOULD_PAUSE);
             if (shouldPause != null) {
-                shouldPauseInAppBrowser = shouldPause.booleanValue();
+                shouldPauseInAppBrowser = shouldPause.equals("yes") ? true : false;
             }
-            Boolean wideViewPort = features.get(USER_WIDE_VIEW_PORT);
+            String wideViewPort = features.get(USER_WIDE_VIEW_PORT);
             if (wideViewPort != null ) {
-		            useWideViewPort = wideViewPort.booleanValue();
+		            useWideViewPort = wideViewPort.equals("yes") ? true : false;
+            }
+
+            String closeButtonCaptionSet = features.get(CLOSE_BUTTON_CAPTION);
+            if (closeButtonCaptionSet != null) {
+                closeButtonCaption = closeButtonCaptionSet;
             }
         }
 
@@ -753,7 +765,7 @@ public class InAppBrowser extends CordovaPlugin {
                 closeLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 close.setLayoutParams(closeLayoutParams);
                 close.setTransformationMethod(null);
-                close.setText("Home");
+                close.setText(closeButtonCaption);
                 close.setTextSize(20);
                 close.setContentDescription("Close Button");
                 close.setId(Integer.valueOf(5));

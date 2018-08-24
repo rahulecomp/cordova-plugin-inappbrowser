@@ -842,6 +842,16 @@ public class InAppBrowser extends CordovaPlugin {
                 HistoryChangeListener historyChangeListener = new HistoryChangeListener() {
                     @Override
                     public void onHistoryChanged() {
+
+
+                         if(!inAppWebView.canGoBack() && !inAppWebView.canGoForward()){
+                             back.setVisibility(View.GONE);
+                             forward.setVisibility(View.GONE);
+                         }else {
+                             back.setVisibility(View.VISIBLE);
+                             forward.setVisibility(View.VISIBLE);
+                         }
+
                         if (inAppWebView.canGoBack()) {
                             back.setImageAlpha(255);
                         } else {

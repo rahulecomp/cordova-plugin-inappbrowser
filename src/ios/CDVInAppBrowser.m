@@ -678,7 +678,13 @@
     self.backButton.enabled = YES;
     self.backButton.imageInsets = UIEdgeInsetsMake(1.5, 0, 0, 0);
     self.backButton.tintColor = [UIColor whiteColor];
-    [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton, self.backButton, fixedSpaceButton, self.forwardButton]];
+    //[self.toolbar setItems:@[self.closeButton, flexibleSpaceButton, self.backButton, fixedSpaceButton, self.forwardButton]];
+    // Filter out Navigation Buttons if user requests so
+    if (_browserOptions.hidenavigationbuttons) {
+        [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton]];
+    } else {
+        [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton, self.backButton, fixedSpaceButton, self.forwardButton]];
+    }
 
     self.view.backgroundColor = [UIColor grayColor];
     [self.view addSubview:self.toolbar];
@@ -1039,6 +1045,7 @@
         self.suppressesincrementalrendering = NO;
         self.hidden = NO;
         self.disallowoverscroll = NO;
+        self.hidenavigationbuttons = NO;
     }
 
     return self;

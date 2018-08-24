@@ -101,6 +101,7 @@ public class InAppBrowser extends CordovaPlugin {
     private static final Boolean DEFAULT_HARDWARE_BACK = true;
     private static final String USER_WIDE_VIEW_PORT = "useWideViewPort";
     private static final String CLOSE_BUTTON_CAPTION = "closebuttoncaption";
+     private static final String HIDE_NAVIGATION = "hidenavigationbuttons";
 
     private static final List customizableOptions = Arrays.asList(CLOSE_BUTTON_CAPTION);
 
@@ -119,6 +120,7 @@ public class InAppBrowser extends CordovaPlugin {
     private boolean shouldPauseInAppBrowser = false;
     private boolean useWideViewPort = true;
     private String closeButtonCaption = "";
+    private boolean hideNavigationButtons = false;
     private ValueCallback<Uri> mUploadCallback;
     private ValueCallback<Uri[]> mUploadCallbackLollipop;
     private final static int FILECHOOSER_REQUESTCODE = 1;
@@ -554,6 +556,11 @@ public class InAppBrowser extends CordovaPlugin {
                 showLocationBar = show.equals("yes") ? true : false;
             }
 
+            if(showLocationBar) {
+                String hideNavigation = features.get(HIDE_NAVIGATION);
+                if(hideNavigation != null) hideNavigationButtons = hideNavigation.equals("yes") ? true : false;
+            }
+
             String zoom = features.get(ZOOM);
             if (zoom != null) {
                 showZoomControls = zoom.equals("yes") ? true : false;
@@ -920,7 +927,7 @@ public class InAppBrowser extends CordovaPlugin {
                 actionButtonContainer.addView(forward);
 
                 // Add the views to our toolbar
-                toolbar.addView(actionButtonContainer);
+                if (!hideNavigationButtons) toolbar.addView(actionButtonContainer);
              //   toolbar.addView(edittext);
                 toolbar.addView(close);
 

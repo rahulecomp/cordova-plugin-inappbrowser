@@ -125,6 +125,7 @@ public class InAppBrowser extends CordovaPlugin {
     private ValueCallback<Uri[]> mUploadCallbackLollipop;
     private final static int FILECHOOSER_REQUESTCODE = 1;
     private final static int FILECHOOSER_REQUESTCODE_LOLLIPOP = 2;
+    public ProgressDialog progressDialog;
 
     /**
      * Executes the request and returns PluginResult.
@@ -307,6 +308,10 @@ public class InAppBrowser extends CordovaPlugin {
      */
     @Override
     public void onPause(boolean multitasking) {
+        
+        if(progressDialog!= null ) {
+            progressDialog.dismiss();
+        }
         if (shouldPauseInAppBrowser) {
             inAppWebView.onPause();
         }
@@ -317,6 +322,9 @@ public class InAppBrowser extends CordovaPlugin {
      */
     @Override
     public void onResume(boolean multitasking) {
+        if(progressDialog!= null ) {
+            progressDialog.dismiss();
+        }
         if (shouldPauseInAppBrowser) {
             inAppWebView.onResume();
         }
@@ -1031,7 +1039,6 @@ public class InAppBrowser extends CordovaPlugin {
     public class InAppBrowserClient extends WebViewClient {
         EditText edittext;
         CordovaWebView webView;
-        ProgressDialog progressDialog;
         HistoryChangeListener historyChangeListener;
         /**
          * Constructor.

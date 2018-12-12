@@ -1072,7 +1072,12 @@ public class InAppBrowser extends CordovaPlugin {
          */
         @Override
         public boolean shouldOverrideUrlLoading(WebView webView, String url) {
-            if (url.startsWith(WebView.SCHEME_TEL)) {
+            
+            progressDialog.show();
+            if(url.contains("DownloadDocument") || url.contains("DownloadPublicDocument")) {
+                webView.loadUrl(url);
+                return true;
+            } else if (url.startsWith(WebView.SCHEME_TEL)) {
                 try {
                     Intent intent = new Intent(Intent.ACTION_DIAL);
                     intent.setData(Uri.parse(url));
@@ -1122,7 +1127,6 @@ public class InAppBrowser extends CordovaPlugin {
                     LOG.e(LOG_TAG, "Error sending sms " + url + ":" + e.toString());
                 }
             }
-            progressDialog.show();
             return false;
         }
 

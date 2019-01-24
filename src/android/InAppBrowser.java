@@ -1074,7 +1074,7 @@ public class InAppBrowser extends CordovaPlugin {
         public boolean shouldOverrideUrlLoading(WebView webView, String url) {
             
             progressDialog.show();
-            if(url.contains("DownloadDocument") || url.contains("DownloadPublicDocument")) {
+            if(url.contains("DownloadDocument") || url.contains("DownloadPublicDocument") || url.contains("RetrieveCertificateAttachment")) {
                 webView.loadUrl(url);
                 return true;
             } else if (url.startsWith(WebView.SCHEME_TEL)) {

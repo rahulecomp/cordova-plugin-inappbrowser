@@ -19,6 +19,7 @@
 package org.apache.cordova.inappbrowser;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -49,6 +50,7 @@ import android.webkit.CookieSyncManager;
 import android.webkit.HttpAuthHandler;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -1070,9 +1072,32 @@ public class InAppBrowser extends CordovaPlugin {
          * @param webView
          * @param url
          */
+
+        @SuppressWarnings("deprecation")
         @Override
         public boolean shouldOverrideUrlLoading(WebView webView, String url) {
-            
+            return shouldOverrideUrlLoading(webView, url, null);
+        }
+
+        /**
+         * Override the URL that should be loaded
+         *
+         * New (added in API 24)
+         * For Android 7 and above.
+         *
+         * @param webView
+         * @param request
+         */
+        @TargetApi(Build.VERSION_CODES.N)
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView webView, WebResourceRequest request) {
+            return shouldOverrideUrlLoading(webView, request.getUrl().toString(), request.getMethod());
+        }
+
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView webView, String url, String method) {
+            // method param not added now but might use later for support for beforeload
             progressDialog.show();
             if(url.contains("DownloadDocument") || url.contains("DownloadPublicDocument") || url.contains("RetrieveCertificateAttachment")) {
                 webView.loadUrl(url);

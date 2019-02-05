@@ -1095,7 +1095,6 @@ public class InAppBrowser extends CordovaPlugin {
         }
 
 
-        @Override
         public boolean shouldOverrideUrlLoading(WebView webView, String url, String method) {
             // method param not added now but might use later for support for beforeload
             progressDialog.show();
